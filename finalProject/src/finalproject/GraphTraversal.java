@@ -25,33 +25,6 @@ public class GraphTraversal {
 
 	//TODO level 1: implement DFS traversal starting from s
 
-//	private static ArrayList<Tile> depthRecursive(Tile start, ArrayList<Tile> visitedTiles) {
-//
-//		visitedTiles.add(start);
-//
-//		int numberOfNeighbors = start.neighbors.size();
-//		boolean alreadyVisited = false;
-//
-//		for (int i=0 ; i<numberOfNeighbors ; i++) {
-//
-//			if (start.neighbors.get(i).isWalkable()) {
-//
-//				for (int j=0 ; j<visitedTiles.size() ; j++) {
-//
-//                    if (!(visitedTiles.get(j).equals(start.neighbors.get(i)))) {
-//                        alreadyVisited = true;
-//                        break;
-//                    }
-//				}
-//
-//				if (!alreadyVisited){
-//					depthRecursive(start.neighbors.get(i), visitedTiles);
-//				}
-//			}
-//		}
-//
-//		return visitedTiles;
-//	}
 
 	private static ArrayList<Tile> depthRecursive(Tile start, ArrayList<Tile> visitedArray){
 
