@@ -1,38 +1,72 @@
 package finalproject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import finalproject.system.Tile;
-import finalproject.system.TileType;
-import finalproject.tiles.*;
 
 public class Graph {
 	// TODO level 2: Add fields that can help you implement this data type
 
+    private ArrayList<Tile> verticesArrayG;
+
+    private ArrayList<Edge> edgesArrayG;
+
+
+
     // TODO level 2: initialize and assign all variables inside the constructor
 	public Graph(ArrayList<Tile> vertices) {
-		
+		this.verticesArrayG = vertices;
 	}
 	
     // TODO level 2: add an edge to the graph
     public void addEdge(Tile origin, Tile destination, double weight){
-    	
+    	Edge newEdge = new Edge(origin, destination, weight);
+        edgesArrayG.add(newEdge);
     }
     
-    // TODO level 2: return a list of all edges in the graph
+//     TODO level 2: return a list of all edges in the graph
 	public ArrayList<Edge> getAllEdges() {
-		return null;
+		return this.edgesArrayG;
 	}
   
 	// TODO level 2: return list of tiles adjacent to t
-	public ArrayList<Tile> getNeighbors(Tile t) {
-    	return null;
+	public ArrayList<Tile> getNeighbors(Tile t) { // Should we build the neighbors array orrr is this okay??
+    	ArrayList<Tile> neighborsOfTile = t.neighbors;
+        return neighborsOfTile;
     }
 	
 	// TODO level 2: return total cost for the input path
+
+    private ArrayList<Edge> edgesFromTiles(ArrayList<Tile> tiles){
+
+        ArrayList<Edge> edgesArray = new ArrayList<>();
+
+        for (int i=0 ; i<tiles.size()-1 ; i++) {
+
+            Tile origin = tiles.get(i);
+            Tile destination = tiles.get(i+1);
+            double weight = destination.distanceCost + destination.timeCost + destination.damageCost; // Change this
+            // according to the graph we're building?? (p.9)
+
+            Edge newEdge = new Edge(origin, destination, weight);
+
+            edgesArray.add(newEdge);
+        }
+
+        return edgesArray;
+
+    }
+
 	public double computePathCost(ArrayList<Tile> path) {
-		return 0.0;
+
+        double totalCost = 0.0;
+        ArrayList<Edge> edgesArray = edgesFromTiles(path);
+
+        for (int i=0 ; i<edgesArray.size() ; i++){
+            totalCost = totalCost + edgesArray.get(i).weight;
+        }
+
+		return totalCost;
 	}
 	
    
@@ -43,18 +77,19 @@ public class Graph {
 
         // TODO level 2: initialize appropriate fields
         public Edge(Tile s, Tile d, double cost){
-        	
+        	this.origin = s;
+            this.destination = d;
+            this.weight = cost;
         }
         
         // TODO level 2: getter function 1
         public Tile getStart(){
-            return null;
+            return this.origin;
         }
 
-        
         // TODO level 2: getter function 2
         public Tile getEnd() {
-            return null;
+            return this.destination;
         }
         
     }
