@@ -8,50 +8,59 @@ import finalproject.system.Tile;
 public class TilePriorityQ {
 	// TODO level 3: Add fields that can help you implement this data type
 
-	private ArrayList<Tile> priorityQueue;
+	private ArrayList<Tile> priorityQueue = new ArrayList<>();
 
-	private int size = priorityQueue.size();
+	private int size;
 
-	// TODO level 3: implement the constructor for the priority queue
+	private void swap(int index1, int index2, ArrayList<Tile> array){
+		Tile temp = array.get(index2);
 
-	private void addUpHeap(Tile tileToAdd, ArrayList<Tile> priorityQueue){
+		array.set(index2, array.get(index1));
+		array.set(index1, temp);
+
+		return;
+	}
+
+	private void addUpHeap(Tile tileToAdd){
+
+		this.priorityQueue.add(0, null);
+
 		this.size = size + 1;
 		priorityQueue.add(size, tileToAdd);
-		double tileCost = tileToAdd.costEstimate;
 		int i = size;
 
 		while ( (i<1) && (priorityQueue.get(i).costEstimate < priorityQueue.get(i/2).costEstimate) ) {
 
-			Tile temp =  priorityQueue.get(i/2); // swapping object at i and i/2
-			priorityQueue.add(i/2, priorityQueue.get(i));
-			priorityQueue.add(i, temp);
+			swap(i, i/2, this.priorityQueue); // swapping object at i and i/2
 
 			i = i/2;
 		}
 	}
 
-	private ArrayList<Tile> buildHeap(ArrayList<Tile> vertices){
-
-		ArrayList<Tile> priorityQueue = new ArrayList<>();
+	private void buildHeap(ArrayList<Tile> vertices){
 
 		for (int i=0 ; i<vertices.size() ; i++){
-			addUpHeap(vertices.get(i), priorityQueue); // do this or the buildHeapFast() method in the slides
+			addUpHeap(vertices.get(i)); // do this or the buildHeapFast() method in the slides
 			// (30 - Heaps, slide 85)
 		}
-
-		return priorityQueue;
+		return;
 	}
 
 	public TilePriorityQ (ArrayList<Tile> vertices) {
 
 		// a constructor that builds a priority queue with the Tiles received as input.
 
-		this.priorityQueue = buildHeap(vertices);
+		this.priorityQueue = new ArrayList<>();
+		this.size = 0;
+		this.priorityQueue.add(0, null);
+
+		buildHeap(vertices);
 	}
 	
 	// TODO level 3: implement remove min as seen in class
 
 	private void downHeap(int startIndex, int maxIndex, ArrayList<Tile> priorityQueue) {
+
 		int i = startIndex;
 
 		while(2*i <= maxIndex){
@@ -67,9 +76,7 @@ public class TilePriorityQ {
 
 			if (priorityQueue.get(child).costEstimate < priorityQueue.get(i).costEstimate) {
 
-				Tile temp =  priorityQueue.get(child); // swapping object at i and child
-				priorityQueue.add(child, priorityQueue.get(i));
-				priorityQueue.add(i, temp);
+				swap(i, child, priorityQueue) ;// swapping object at i and child
 
 				i = child;
 			}
@@ -83,10 +90,10 @@ public class TilePriorityQ {
 
 	public Tile removeMin() {
 
-		// a method that takes no inputs and removed the Tile with highest priority (i.e. minimun estimate cost)
+		// a method that takes no inputs and removes the Tile with the highest priority (i.e. minimum estimate cost)
 		// from the queue.
 
-		Tile temp = this.priorityQueue.get(1);
+		Tile temp = this.priorityQueue.get(1); // swapping first and last
 		this.priorityQueue.add(1, this.priorityQueue.get(size));
 		this.priorityQueue.remove(size);
 
@@ -119,19 +126,20 @@ public class TilePriorityQ {
 		}
 
 		if (tileBelongs) {
-			
+
 			tileToModify.predecessor = newPred;
 			tileToModify.costEstimate = newEstimate;
 
 			ArrayList<Tile> newVertices = new ArrayList<>();
-			
+
 			for (int i=0 ; i<queueBefore.size() ; i++){
 				if (queueBefore.get(i) != null){
 					newVertices.add(queueBefore.get(i));
 				}
 			}
-			
-			this.priorityQueue = buildHeap(newVertices);
+
+//			this.priorityQueue = buildHeap(newVertices);
+			buildHeap(newVertices);
 		}
 
 		return;
