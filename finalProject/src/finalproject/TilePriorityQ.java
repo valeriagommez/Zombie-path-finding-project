@@ -100,32 +100,41 @@ public class TilePriorityQ {
 	// TODO level 3: implement updateKeys as described in the pdf
 	public void updateKeys(Tile t, Tile newPred, double newEstimate) {
 
-		// a method that takes as input a Tile t. If such tile belongs to the queue,the method updates which Tile is
+		// a method that takes as input a Tile t. If such tile belongs to the queue, the method updates which Tile is
 		// predicted to be the predecessor of t in the minimum weight path that leads from a source tile to t as well
 		// as the estimated cost for this path. Note that this information should be stored in the appropriate fields
 		// from the Tile class, and after these updates, the queue should remain a valid min heap.
 
 		boolean tileBelongs = false;
 		ArrayList<Tile> queueBefore = this.priorityQueue;
+		Tile tileToModify = null;
 
 		for (int i=0 ; i<queueBefore.size() ; i++) {
 
 			if (queueBefore.get(i).equals(t)){
+				tileToModify = queueBefore.get(i);
 				tileBelongs = true;
 				break;
 			}
 		}
 
 		if (tileBelongs) {
-			t.predecessor = newPred;
-			t.costEstimate = newEstimate;
+			
+			tileToModify.predecessor = newPred;
+			tileToModify.costEstimate = newEstimate;
+
+			ArrayList<Tile> newVertices = new ArrayList<>();
+			
+			for (int i=0 ; i<queueBefore.size() ; i++){
+				if (queueBefore.get(i) != null){
+					newVertices.add(queueBefore.get(i));
+				}
+			}
+			
+			this.priorityQueue = buildHeap(newVertices);
 		}
 
-		// create new ArrayList<Tile> with the updated values, and build a new priority queue using that array.
-		// update this.priorityQueue to that.
-
 		return;
-
 	}
 	
 }
