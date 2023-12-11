@@ -12,6 +12,10 @@ public class TilePriorityQ {
 
 	private int size;
 
+	public ArrayList<Tile> getPriorityQueue(){
+		return this.priorityQueue;
+	}
+
 	private void swap(int index1, int index2, ArrayList<Tile> array){
 		Tile temp = array.get(index2);
 
@@ -90,18 +94,20 @@ public class TilePriorityQ {
 
 	public Tile removeMin() {
 
-		// a method that takes no inputs and removes the Tile with the highest priority (i.e. minimum estimate cost)
+		// a method that takes no inputs and removed the Tile with highest priority (i.e. minimun estimate cost)
 		// from the queue.
 
-		Tile temp = this.priorityQueue.get(1); // swapping first and last
-		this.priorityQueue.add(1, this.priorityQueue.get(size));
-		this.priorityQueue.remove(size);
+		Tile removedTile = this.priorityQueue.get(1);
+
+		swap(1, size, this.priorityQueue); // swapping first and last
+//		this.priorityQueue.add(1, this.priorityQueue.get(size));
+//		this.priorityQueue.remove(size);
 
 		this.size = size - 1;
 
 		downHeap(1, size, this.priorityQueue);
 
-		return temp;
+		return removedTile;
 	}
 	
 	// TODO level 3: implement updateKeys as described in the pdf
