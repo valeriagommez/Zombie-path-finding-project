@@ -12,11 +12,20 @@ public class Graph {
     private ArrayList<Edge> edgesArrayG;
 
 
-
     // TODO level 2: initialize and assign all variables inside the constructor
-	public Graph(ArrayList<Tile> vertices) {
+	public Graph(ArrayList<Tile> vertices) { // IS THIS EVEN WELL DONE?? like i'm not exactly building a graph
+
+        //  a constructor that builds the graph given a list containing all of its vertices.
+        //  This graph should NOT contain any edges. The constructor should be used to initialize
+        //  the vertices of the graph and whichever fields you decided to use in this class.
+
 		this.verticesArrayG = vertices;
+        this.edgesArrayG = new ArrayList<>();
 	}
+
+    public ArrayList<Tile> getVertices(){
+        return this.verticesArrayG;
+    }
 	
     // TODO level 2: add an edge to the graph
     public void addEdge(Tile origin, Tile destination, double weight){
@@ -30,14 +39,18 @@ public class Graph {
 	}
   
 	// TODO level 2: return list of tiles adjacent to t
-	public ArrayList<Tile> getNeighbors(Tile t) { // Should we build the neighbors array orrr is this okay??
+	public ArrayList<Tile> getNeighbors(Tile t) { // THIS IS WRONG FIX IT
+
+        // a method that takes a Tile as input and returns an ArrayList containing all the Tiles adjacent
+        // to it in this graph.
+
     	ArrayList<Tile> neighborsOfTile = t.neighbors;
         return neighborsOfTile;
     }
 	
 	// TODO level 2: return total cost for the input path
 
-    private ArrayList<Edge> edgesFromTiles(ArrayList<Tile> tiles){
+    public ArrayList<Edge> edgesFromTiles(ArrayList<Tile> tiles){
 
         ArrayList<Edge> edgesArray = new ArrayList<>();
 
@@ -47,6 +60,25 @@ public class Graph {
             Tile destination = tiles.get(i+1);
             double weight = destination.distanceCost + destination.timeCost + destination.damageCost; // Change this
             // according to the graph we're building?? (p.9)
+
+            Edge newEdge = new Edge(origin, destination, weight);
+
+            edgesArray.add(newEdge);
+        }
+
+        return edgesArray;
+
+    }
+
+    private ArrayList<Edge> edgesFromTilesDistance(ArrayList<Tile> tiles) {
+
+        ArrayList<Edge> edgesArray = new ArrayList<>();
+
+        for (int i=0 ; i<tiles.size()-1 ; i++) {
+
+            Tile origin = tiles.get(i);
+            Tile destination = tiles.get(i+1);
+            double weight = destination.distanceCost;
 
             Edge newEdge = new Edge(origin, destination, weight);
 
@@ -68,7 +100,19 @@ public class Graph {
 
 		return totalCost;
 	}
-	
+
+    public double computePathCostDistance(ArrayList<Tile> path) {
+
+        double totalCost = 0.0;
+        ArrayList<Edge> edgesArray = edgesFromTilesDistance(path);
+
+        for (int i=0 ; i<edgesArray.size() ; i++){
+            totalCost = totalCost + edgesArray.get(i).weight;
+        }
+
+        return totalCost;
+    }
+
    
     public static class Edge{
     	Tile origin;
