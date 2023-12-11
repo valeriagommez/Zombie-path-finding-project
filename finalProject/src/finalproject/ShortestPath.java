@@ -29,11 +29,20 @@ public class ShortestPath extends PathFindingService {
 //        use the method isWalkable() to help you figure out which tiles are not just obstacles.
 
         Tile startingTile = this.source;
-        ArrayList<Tile> tilesReached = GraphTraversal.DFS(startingTile);
-        ArrayList<Tile> edges; // use edgesFromTiles to build the edges for the graph, and then do something
-                // to store the weight of the graph jcomprends pas bro
+        ArrayList<Tile> tilesReachedBySource = GraphTraversal.DFS(startingTile);
 
-        Graph createdGraph = new Graph(tilesReached);
+        ArrayList<Tile> graphVertices = GraphTraversal.DFS(startingTile);
+        graphVertices.add(startingTile);
+
+        Graph createdGraph = new Graph(graphVertices);
+
+        for (int i=0 ; i<tilesReachedBySource.size() ; i++) {
+
+            Tile destination = tilesReachedBySource.get(i);
+            createdGraph.addEdge(startingTile, destination, destination.distanceCost);
+            createdGraph.addEdge(destination, startingTile, startingTile.distanceCost); // not sure this is what
+            // we're supposed to do with the weight.
+        }
 
         this.g = createdGraph; // storing the created graph in the appropriate field
 
