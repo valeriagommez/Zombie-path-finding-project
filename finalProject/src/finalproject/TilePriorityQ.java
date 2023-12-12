@@ -47,7 +47,6 @@ public class TilePriorityQ {
 			addUpHeap(vertices.get(i)); // do this or the buildHeapFast() method in the slides
 			// (30 - Heaps, slide 85)
 		}
-		return;
 	}
 
 	public TilePriorityQ (ArrayList<Tile> vertices) {
@@ -56,7 +55,6 @@ public class TilePriorityQ {
 
 		this.priorityQueue = new ArrayList<>();
 		this.size = 0;
-		this.priorityQueue.add(0, null);
 
 		buildHeap(vertices);
 	}
@@ -67,13 +65,15 @@ public class TilePriorityQ {
 
 		int i = startIndex;
 
-		while(2*i <= maxIndex){
+		while( 2*i <= maxIndex ){
 
-			int child  = 2*i;
+			int child = 2*i;
 
 			if (child < maxIndex) {
 
-				if (priorityQueue.get(child + 1).costEstimate < priorityQueue.get(child).costEstimate){
+				System.out.println(priorityQueue.get(2)); // this prints null when it shouldn't
+
+				if (priorityQueue.get(child + 1).costEstimate < priorityQueue.get(child).costEstimate){  // this line is causing the error 
 						child = child + 1;
 				}
 			}
