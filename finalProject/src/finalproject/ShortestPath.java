@@ -14,9 +14,9 @@ public class ShortestPath extends PathFindingService {
     }
 
 	@Override
-	public void generateGraph() {
+    public void generateGraph() {
 
-		// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
 //        The method creates a weighted graph using the distance cost as weight. This graph should be then stored in
 //        the appropriate field.
@@ -29,23 +29,74 @@ public class ShortestPath extends PathFindingService {
 //        use the method isWalkable() to help you figure out which tiles are not just obstacles.
 
         Tile startingTile = this.source;
-        ArrayList<Tile> tilesReachedBySource = GraphTraversal.DFS(startingTile);
+        ArrayList<Tile> allVertices = GraphTraversal.DFS(startingTile); // not sure if i'm probably missing some
+        // tiles by calling this method
+        allVertices.add(startingTile);
 
-        ArrayList<Tile> graphVertices = GraphTraversal.DFS(startingTile);
-        graphVertices.add(startingTile);
+        Graph graphGenerated = new Graph(allVertices);
 
-        Graph createdGraph = new Graph(graphVertices);
+        for (int i=0 ; i<allVertices.size() ; i++) {
 
-        for (int i=0 ; i<tilesReachedBySource.size() ; i++) {
+            Tile curVertex = allVertices.get(i);
+            ArrayList<Tile> curAdjacentVertices = findAdjacent(curVertex, allVertices);
 
-            Tile destination = tilesReachedBySource.get(i);
-            createdGraph.addEdge(startingTile, destination, destination.distanceCost);
-            createdGraph.addEdge(destination, startingTile, startingTile.distanceCost); // not sure this is what
-            // we're supposed to do with the weight.
-        }
+            for (int j=0 ; j<curAdjacentVertices.size() ; j++){
 
-        this.g = createdGraph; // storing the created graph in the appropriate field
+                Tile curDestination = curAdjacentVertices.get(j);
 
-	}
-    
+                graphGenerated.addEdge(curVertex, curDestination, curDestination.distanceCost); // not sure this is
+                // what we're supposed to do with the weight.
+                graphGenerated.addEdge(curDestination, curVertex, curVertex.distanceCost);
+
+            } // end of j for loop
+        } // end of i for loop
+
+        this.g = graphGenerated;
+
+    } // end of the generateGraph() method
+
+    private ArrayList<Tile> findAdjacent(Tile centerTile, ArrayList<Tile> graphVertices){
+
+        Tile up;
+        Tile down;
+        Tile right;
+        Tile left;
+
+        ArrayList<Tile> adjacentAndWalkable = new ArrayList<>();
+
+        for (int i=0 ; i<graphVertices.size() ; i++) {
+
+            Tile curVertex = graphVertices.get(i);
+
+            if (curVertex.isWalkable()) {
+
+                if ( (curVertex.xCoord == centerTile.xCoord) && (curVertex.yCoord == centerTile.yCoord-1) ){
+                    up = curVertex;
+                    adjacentAndWalkable.add(up);
+                }
+
+                else if ( (curVertex.xCoord == centerTile.xCoord) && (curVertex.yCoord == centerTile.yCoord+1) ){
+                    down = curVertex;
+                    adjacentAndWalkable.add(down);
+                }
+
+                else if ( (curVertex.xCoord == centerTile.xCoord+1) && (curVertex.yCoord == centerTile.yCoord) ){
+                    right = curVertex;
+                    adjacentAndWalkable.add(right);
+                }
+
+                else if ( (curVertex.xCoord == centerTile.xCoord-1) && (curVertex.yCoord == centerTile.yCoord) ){
+                    left = curVertex;
+                    adjacentAndWalkable.add(left);
+                }
+
+            } // end of if Walkable
+        } // end of for loop
+
+        return adjacentAndWalkable;
+
+    } // end of findAdjacent
+
+
+
 }
