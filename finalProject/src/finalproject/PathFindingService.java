@@ -47,8 +47,9 @@ public abstract class PathFindingService {
         TilePriorityQ Q = new TilePriorityQ(vertices);
         ArrayList<Tile> priorityQueue = Q.getPriorityQueue();
 
-        while ( !(priorityQueue.isEmpty()) ){
+        while ( !(priorityQueue.size() == 1) ){
             Tile tile1 = Q.removeMin();
+//            System.out.println(S);
             S.add(tile1);
 
             for (int i=0 ; i < this.g.getNeighbors(tile1).size() ; i++) {
