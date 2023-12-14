@@ -35,6 +35,7 @@ public class Graph {
     
 //     TODO level 2: return a list of all edges in the graph
 	public ArrayList<Edge> getAllEdges() {
+//        System.out.println(allEdges);
 		return this.allEdges;
 	}
   
@@ -70,27 +71,10 @@ public class Graph {
 
             Tile origin = tiles.get(i);
             Tile destination = tiles.get(i+1);
-            double weight = destination.distanceCost + destination.timeCost + destination.damageCost; // Change this
-            // according to the graph we're building?? (p.9)
-
-            Edge newEdge = new Edge(origin, destination, weight);
-
-            edgesArray.add(newEdge);
-        }
-
-        return edgesArray;
-
-    }
-
-    private ArrayList<Edge> edgesFromTilesDistance(ArrayList<Tile> tiles) {
-
-        ArrayList<Edge> edgesArray = new ArrayList<>();
-
-        for (int i=0 ; i<tiles.size()-1 ; i++) {
-
-            Tile origin = tiles.get(i);
-            Tile destination = tiles.get(i+1);
             double weight = destination.distanceCost;
+
+//            double weight = destination.distanceCost + destination.timeCost + destination.damageCost; // Change this
+            // according to the graph we're building?? (p.9)
 
             Edge newEdge = new Edge(origin, destination, weight);
 
@@ -105,8 +89,10 @@ public class Graph {
 
         double totalCost = 0.0;
         ArrayList<Edge> edgesArray = edgesFromTiles(path);
+//        System.out.println(edgesArray);
 
         for (int i=0 ; i<edgesArray.size() ; i++){
+//            System.out.println(edgesArray.get(i).weight);
             totalCost = totalCost + edgesArray.get(i).weight;
         }
 
