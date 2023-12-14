@@ -7,15 +7,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class PathFindingService {
-	Tile source;
-	Graph g;
-	
-	public PathFindingService(Tile start) {
-    	this.source = start;
+    Tile source;
+    Graph g;
+
+    public PathFindingService(Tile start) {
+        this.source = start;
     }
 
-	public abstract void generateGraph();
-    
+    public abstract void generateGraph();
+
     //TODO level 4: Implement basic dijkstra's algorithm to find a path to the final unknown destination
 
     private void initialization(ArrayList<Tile> vertices, Tile start){
@@ -45,16 +45,17 @@ public abstract class PathFindingService {
 
         ArrayList<Tile> S = new ArrayList<>(); // array with fully analyzed vertices
         TilePriorityQ Q = new TilePriorityQ(vertices);
-        ArrayList<Tile> priorityQueue = Q.getPriorityQueue();
 
-        while ( !(priorityQueue.size() == 1) ){
+//        while (priorityQueue.size() != 1){
+        for (int i=0 ; i<Q.getSize() ; i++){
+
             Tile tile1 = Q.removeMin();
-//            System.out.println(S);
+            System.out.println(S); // works
             S.add(tile1);
 
-            for (int i=0 ; i < this.g.getNeighbors(tile1).size() ; i++) {
+            for (int j=0 ; j < this.g.getNeighbors(tile1).size() ; j++) {
 
-                Tile tile2 = this.g.getNeighbors(tile1).get(i);
+                Tile tile2 = this.g.getNeighbors(tile1).get(j);
 
                 double curEdgeWeight = tile2.distanceCost; // I DON'T THINK THIS IS RIGHT
 
@@ -63,10 +64,10 @@ public abstract class PathFindingService {
                     Q.updateKeys(tile2, tile1, newEstimate);
                 }
 
-            }
-        }
+            } // end of 2nd for loop
+        } // end of 1st for loop
 
-    }
+    } // end of findPath()
 
     private void reverseArray(ArrayList<Tile> arr){
 
@@ -113,9 +114,9 @@ public abstract class PathFindingService {
 
         reverseArray(path);
 
-    	return path;
+        return path;
     }
-    
+
     //TODO level 5: Implement basic dijkstra's algorithm to path find to a known destination
     public ArrayList<Tile> findPath(Tile start, Tile end) {
 
@@ -125,21 +126,7 @@ public abstract class PathFindingService {
 //        that once a node has been visited by the algorithm, one is already able to figure out what is the
 //        shortest path from the source to this node.
 
-        dijkstra(this.g.getVertices(), start);
-
-        ArrayList<Tile> path = new ArrayList<>();
-        Tile temp = end;
-
-        path.add(end);
-
-        while (temp != null && temp != start){
-            path.add(temp.predecessor);
-            temp = temp.predecessor;
-        }
-
-        reverseArray(path);
-
-        return path;
+        return null;
 
     }
 
@@ -152,8 +139,7 @@ public abstract class PathFindingService {
 //        not be provided within the list of waypoints. You can figure out which one is the destination tile by
 //        accessing the field isDestination from the Tile class.
 
-    	return null;
+        return null;
     }
-        
-}
 
+}
