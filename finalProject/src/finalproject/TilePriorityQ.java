@@ -15,6 +15,10 @@ public class TilePriorityQ {
 		return this.priorityQueue;
 	}
 
+	public int getSize(){
+		return this.size;
+	}
+
 	private void swap(int index1, int index2, ArrayList<Tile> array) {
 		Tile temp = array.get(index2);
 		array.set(index2, array.get(index1));
@@ -58,7 +62,7 @@ public class TilePriorityQ {
 //		this.size = 0;
 		this.priorityQueue = buildHeap(vertices);
 	}
-	
+
 	// TODO level 3: implement remove min as seen in class
 
 	private void downHeap(int startIndex, int maxIndex, ArrayList<Tile> priorityQueue) {
@@ -77,8 +81,8 @@ public class TilePriorityQ {
 //				System.out.println(this.priorityQueue);
 //				System.out.println(priorityQueue);
 
-				if (priorityQueue.get(child + 1).costEstimate < priorityQueue.get(child).costEstimate){  // this line is causing the error 
-						child = child + 1;
+				if (priorityQueue.get(child + 1).costEstimate < priorityQueue.get(child).costEstimate){  // this line is causing the error
+					child = child + 1;
 				}
 			}
 
@@ -118,7 +122,7 @@ public class TilePriorityQ {
 
 		return removedTile;
 	}
-	
+
 	// TODO level 3: implement updateKeys as described in the pdf
 	public void updateKeys(Tile t, Tile newPred, double newEstimate) {
 
@@ -163,5 +167,5 @@ public class TilePriorityQ {
 
 		return;
 	}
-	
+
 }
