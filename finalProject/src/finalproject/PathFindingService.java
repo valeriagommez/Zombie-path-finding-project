@@ -30,42 +30,64 @@ public abstract class PathFindingService {
     }
 
 
-    private void dijkstra(ArrayList<Tile> vertices, Tile start){
+    private Tile dijkstra(ArrayList<Tile> vertices, Tile start){
 
         initialization(vertices, start);
 
         ArrayList<Tile> S = new ArrayList<>(); // array with fully analyzed vertices
         TilePriorityQ Q = new TilePriorityQ(vertices);
+        Tile tile1 = null;
 
-        for (int i=0 ; i<Q.getSize() ; i++){
+        System.out.println("Priority Q : " + Q.getPriorityQueue());
+        System.out.println("Priority Q size : " + Q.getSize());
 
-            Tile tile1 = Q.removeMin();
+        int sizeOfPriorityQ = Q.getSize();
+
+//        for (int i=0 ; i<Q.getSize() ; i++){ // the size was going down at each iteration,
+//        so we only went through half of it
+
+        for (int i=0 ; i<sizeOfPriorityQ ; i++){
+
+            tile1 = Q.removeMin();
+            System.out.println();
+            System.out.println(Q.getPriorityQueue());
 //            System.out.println(S); // works
+
             S.add(tile1);
+//            System.out.println(Q.getSize()); // these two have to add to sizeOfPriorityQ at all times
+            System.out.println(S.size());
 
             for (int j=0 ; j < this.g.getNeighbors(tile1).size() ; j++) {
 
                 Tile tile2 = this.g.getNeighbors(tile1).get(j);
+                System.out.println("tile1 : " + tile1);
+                System.out.println("tile2 (" +  j +  ") : " + tile2);
 
-                double curEdgeWeight = tile2.distanceCost; // I DON'T THINK THIS IS RIGHT
+                Graph.Edge t1t2Edge = g.getEdge(tile1, tile2); // refer to weight using the edge between t1 and t2
+                double curEdgeWeight = t1t2Edge.weight;
 
-//                System.out.println();
-//                System.out.println("tile2.costEstimate : " + tile2.costEstimate);
-//                System.out.println("tile1.costEstimate : " + tile1.costEstimate);
-//                System.out.println("tile2.distanceCost : " + curEdgeWeight);
-//                System.out.println(tile2.costEstimate + " > " + tile1.costEstimate + " + " + curEdgeWeight); // This seems to work
+
+                System.out.println("tile2.costEstimate : " + tile2.costEstimate);
+                System.out.println("tile1.costEstimate : " + tile1.costEstimate);
+                System.out.println("tile2.distanceCost : " + curEdgeWeight);
+                System.out.println(tile2.costEstimate + " > " + tile1.costEstimate + " + " + curEdgeWeight); // This seems to work
 
                 if (tile2.costEstimate > tile1.costEstimate + curEdgeWeight) { // RELAXING THE EDGES
                     double newEstimate = tile1.costEstimate + curEdgeWeight;
 
-//                    System.out.println("If yes!! then newEstimate = " + newEstimate);
+                    System.out.println("If yes!! then " + tile2 + " newEstimate = " + newEstimate);
+                    System.out.println(tile2 + " predecessor = " + tile1);
 
                     Q.updateKeys(tile2, tile1, newEstimate); // tile2 predecessor = t1 and costEstimate = newEstimate
+                    System.out.println(tile2 + " newEstimate = " + tile2.costEstimate);
+                    System.out.println(tile2 + " predecessor = " + tile2.predecessor);
+                    System.out.println();
                 }
 
             } // end of 2nd for loop
         } // end of 1st for loop
 
+        return tile1;
     } // end of findPath()
 
     private void reverseArray(ArrayList<Tile> arr){
@@ -90,20 +112,22 @@ public abstract class PathFindingService {
         ShortestPath shortestPath = new ShortestPath(startNode);
         shortestPath.generateGraph();
 
-        dijkstra(this.g.getVertices(), startNode);
+        Tile destination = dijkstra(this.g.getVertices(), startNode);
+        System.out.println("\ndestination : " + destination); // works
 
-        Tile destination = null;
 
         System.out.println("origin : " + startNode); // Works
-
-        for (int i=0 ; i<this.g.getVertices().size() ; i++) {
-
-            if (this.g.getVertices().get(i).isDestination) { // ??
-                destination = this.g.getVertices().get(i);
-                System.out.println("destination : " + destination); // works
-                break;
-            }
-        }
+//
+//        for (int i=0 ; i<this.g.getVertices().size() ; i++) {
+//
+//            if (this.g.getVertices().get(i).isDestination) { // instead of using isDestination,
+//                // use the tile that's removed last from the priority q
+//
+//                destination = this.g.getVertices().get(i);
+//                System.out.println("destination : " + destination); // works
+//                break;
+//            }
+//        }
 
         ArrayList<Tile> path = new ArrayList<>();
         Tile temp = destination;
@@ -131,6 +155,8 @@ public abstract class PathFindingService {
 //        algorithm will never visit each node in the graph (reachable from the source) exactly once. This means
 //        that once a node has been visited by the algorithm, one is already able to figure out what is the
 //        shortest path from the source to this node.
+
+
 
         return null;
 
