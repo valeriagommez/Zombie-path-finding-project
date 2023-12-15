@@ -141,8 +141,14 @@ public class TilePriorityQ {
 
 		if (tileBelongs) {
 
+			System.out.println("updateKeys() before predecessor : " + tileToModify.predecessor);
+			System.out.println("updateKeys() before costEstimate : " + tileToModify.costEstimate);
+
 			tileToModify.predecessor = newPred;
 			tileToModify.costEstimate = newEstimate;
+
+			System.out.println("updateKeys() after predecessor : " + tileToModify.predecessor);
+			System.out.println("updateKeys() after costEstimate : " + tileToModify.costEstimate);
 
 			ArrayList<Tile> newVertices = new ArrayList<>();
 
@@ -153,15 +159,13 @@ public class TilePriorityQ {
 			}
 
 			TilePriorityQ updatedQueue = new TilePriorityQ(newVertices);
-
-			this.priorityQueue = updatedQueue.priorityQueue;
+			this.priorityQueue = updatedQueue.getPriorityQueue();
 
 //			If such tile belongs to the queue, the method updates which Tile is predicted
 //			to be the predecessor of t in the minimum weight path that leads from a source tile to t
 //			as well as the estimated cost for this path. Note that this information should be stored
 //			in the appropriate fields from the Tile class, and after these updates, the queue should
 //			remain a valid min heap
-
 
 		}
 
