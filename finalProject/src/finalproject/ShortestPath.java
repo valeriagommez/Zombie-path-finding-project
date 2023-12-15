@@ -1,56 +1,119 @@
 package finalproject;
 
+import java.util.ArrayList;
+
 import finalproject.system.Tile;
 
-public class ShortestPath extends PathFindingService {
+public class Graph {
 
-    //TODO level 4: find distance prioritized path
-    public ShortestPath(Tile start) {
-        super(start);
-        this.generateGraph();
+    // TODO level 2: Add fields that can help you implement this data type
+
+    private ArrayList<Tile> verticesArrayG;
+
+    private ArrayList<Edge> allEdges;
+
+
+    // TODO level 2: initialize and assign all variables inside the constructor
+    public Graph(ArrayList<Tile> vertices) {
+
+        //  a constructor that builds the graph given a list containing all of its vertices.
+        //  This graph should NOT contain any edges. The constructor should be used to initialize
+        //  the vertices of the graph and whichever fields you decided to use in this class.
+
+        this.verticesArrayG = vertices;
+        this.allEdges = new ArrayList<>();
     }
 
-	@Override
-    public void generateGraph() {
+    public ArrayList<Tile> getVertices() {
+        return this.verticesArrayG;
+    }
 
-        // TODO Auto-generated method stub
+    // TODO level 2: add an edge to the graph
+    public void addEdge(Tile origin, Tile destination, double weight){
+        Edge newEdge = new Edge(origin, destination, weight);
+        allEdges.add(newEdge);
+    }
 
-//        The method creates a weighted graph using the distance cost as weight. This graph should be then stored in
-//        the appropriate field.
+    //     TODO level 2: return a list of all edges in the graph
+    public ArrayList<Edge> getAllEdges() {
+        return this.allEdges;
+    }
 
-//        To make sure that the graph is generated each time a ShortestPath object is created, you should
-//        add a call to this method inside the constructor.
+    // TODO level 2: return list of tiles adjacent to t
+    public ArrayList<Tile> getNeighbors(Tile t) { // is this ok???
 
-//        Note: You can use BFS or DFS to help you get a list of all reachable tiles. Remember also that the
-//        graph you want to build should only connect tiles that are designed to be travelled through. You can
-//        use the method isWalkable() to help you figure out which tiles are not just obstacles.
+        // a method that takes a Tile as input and returns an ArrayList containing all the Tiles adjacent
+        // to it in this graph.
 
-        Tile startingTile = this.source;
-//        System.out.println(allVertices); // works
+        ArrayList<Tile> neighborsOfTile = new ArrayList<>();
 
-        Graph graphGenerated = new Graph(GraphTraversal.DFS(startingTile));
-//        System.out.println(graphGenerated.getVertices()); // works
+        for (int i=0 ; i<this.allEdges.size() ; i++){
 
+            Edge curEdge = this.allEdges.get(i);
 
-        for (int i=0 ; i<GraphTraversal.DFS(startingTile).size() ; i++) {
+            if (curEdge.origin.equals(t)){
+                Tile tDestination = curEdge.destination;
+                neighborsOfTile.add(tDestination);
+            }
 
-            Tile curVertex = GraphTraversal.DFS(startingTile).get(i);
+        }
 
-            for (int j=0 ; j<curVertex.neighbors.size() ; j++){
+        return neighborsOfTile;
+    }
 
-                Tile curDestination = curVertex.neighbors.get(j);
+    public Edge getEdge(Tile origin, Tile destination){
 
-                if (curDestination.isWalkable()){
-                    graphGenerated.addEdge(curVertex, curDestination, curDestination.distanceCost); // not sure this is
-                    // what we're supposed to do with the weight.
-                }
+        for (int i=0 ; i<this.allEdges.size() ; i++){
 
-            } // end of j for loop
-        } // end of i for loop
+            Edge curEdge = this.allEdges.get(i);
 
-        this.g = graphGenerated;
+            if (curEdge.getStart().equals(origin) && curEdge.getEnd().equals(destination)){
+                return curEdge;
+            }
+        }
 
-    } // end of the generateGraph() method
+        return null;
+    }
 
+    public double computePathCost(ArrayList<Tile> path) {
+
+        double totalCost = 0.0;
+
+        for (int i=0 ; i<path.size()-1 ; i++) {
+
+            Tile origin = path.get(i);
+            Tile destination = path.get(i+1);
+
+            Edge edgeBetween = getEdge(origin, destination);
+            totalCost = totalCost + edgeBetween.weight;
+
+        }
+
+        return totalCost;
+    }
+
+    public static class Edge{
+        Tile origin;
+        Tile destination;
+        double weight;
+
+        // TODO level 2: initialize appropriate fields
+        public Edge(Tile s, Tile d, double cost){
+            this.origin = s;
+            this.destination = d;
+            this.weight = cost;
+        }
+
+        // TODO level 2: getter function 1
+        public Tile getStart(){
+            return this.origin;
+        }
+
+        // TODO level 2: getter function 2
+        public Tile getEnd() {
+            return this.destination;
+        }
+
+    }
 
 }
