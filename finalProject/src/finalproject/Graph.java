@@ -60,57 +60,37 @@ public class Graph {
 
         return neighborsOfTile;
     }
-	
-	// TODO level 2: return total cost for the input path
 
-    public ArrayList<Edge> edgesFromTiles(ArrayList<Tile> tiles){
+    private Edge getEdge(Tile origin, Tile destination){
 
-        ArrayList<Edge> edgesArray = new ArrayList<>();
+        for (int i=0 ; i<this.allEdges.size() ; i++){
 
-        for (int i=0 ; i<tiles.size()-1 ; i++) {
+            Edge curEdge = this.allEdges.get(i);
 
-            Tile origin = tiles.get(i);
-            Tile destination = tiles.get(i+1);
-            double weight = destination.distanceCost;
-
-//            double weight = destination.distanceCost + destination.timeCost + destination.damageCost; // Change this
-            // according to the graph we're building?? (p.9)
-
-            Edge newEdge = new Edge(origin, destination, weight);
-
-            edgesArray.add(newEdge);
+            if (curEdge.getStart().equals(origin) && curEdge.getEnd().equals(destination)){
+                return curEdge;
+            }
         }
 
-        return edgesArray;
-
+        return null;
     }
 
 	public double computePathCost(ArrayList<Tile> path) {
 
         double totalCost = 0.0;
-        ArrayList<Edge> edgesArray = edgesFromTiles(path);
-//        System.out.println(edgesArray);
 
-        for (int i=0 ; i<edgesArray.size() ; i++){
-//            System.out.println(edgesArray.get(i).weight);
-            totalCost = totalCost + edgesArray.get(i).weight;
+        for (int i=0 ; i<path.size()-1 ; i++) {
+
+            Tile origin = path.get(i);
+            Tile destination = path.get(i+1);
+
+            Edge edgeBetween = getEdge(origin, destination);
+            totalCost = totalCost + edgeBetween.weight;
+
         }
 
 		return totalCost;
 	}
-
-//    public double computePathCostDistance(ArrayList<Tile> path) {
-//
-//        double totalCost = 0.0;
-//        ArrayList<Edge> edgesArray = edgesFromTilesDistance(path);
-//
-//        for (int i=0 ; i<edgesArray.size() ; i++){
-//            totalCost = totalCost + edgesArray.get(i).weight;
-//        }
-//
-//        return totalCost;
-//    }
-
    
     public static class Edge{
     	Tile origin;
