@@ -1135,11 +1135,10 @@ public class MiniTester {
                 return false;
             }
 
-        if (shortest.costGraph.computePathCost(path) != 14) {
+        if (shortest.costGraph.computePathCost(path) != 14){
             System.out.println("Path cost should be 14.");
             return false;
         }
         return true;
     }
 }
-
