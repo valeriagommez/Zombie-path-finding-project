@@ -29,15 +29,6 @@ public abstract class PathFindingService {
         start.costEstimate = 0;
     }
 
-//    private void relax(Tile tile1, Tile tile2, double edgeWeight) {
-//
-//        if (tile2.costEstimate > tile1.costEstimate + edgeWeight){
-//            tile2.costEstimate = tile1.costEstimate + edgeWeight;
-//            tile2.predecessor = tile1;
-//        }
-//
-//        return;
-//    }
 
     private void dijkstra(ArrayList<Tile> vertices, Tile start){
 
@@ -46,11 +37,10 @@ public abstract class PathFindingService {
         ArrayList<Tile> S = new ArrayList<>(); // array with fully analyzed vertices
         TilePriorityQ Q = new TilePriorityQ(vertices);
 
-//        while (priorityQueue.size() != 1){
         for (int i=0 ; i<Q.getSize() ; i++){
 
             Tile tile1 = Q.removeMin();
-            System.out.println(S); // works
+//            System.out.println(S); // works
             S.add(tile1);
 
             for (int j=0 ; j < this.g.getNeighbors(tile1).size() ; j++) {
@@ -59,9 +49,18 @@ public abstract class PathFindingService {
 
                 double curEdgeWeight = tile2.distanceCost; // I DON'T THINK THIS IS RIGHT
 
+//                System.out.println();
+//                System.out.println("tile2.costEstimate : " + tile2.costEstimate);
+//                System.out.println("tile1.costEstimate : " + tile1.costEstimate);
+//                System.out.println("tile2.distanceCost : " + curEdgeWeight);
+//                System.out.println(tile2.costEstimate + " > " + tile1.costEstimate + " + " + curEdgeWeight); // This seems to work
+
                 if (tile2.costEstimate > tile1.costEstimate + curEdgeWeight) { // RELAXING THE EDGES
                     double newEstimate = tile1.costEstimate + curEdgeWeight;
-                    Q.updateKeys(tile2, tile1, newEstimate);
+
+//                    System.out.println("If yes!! then newEstimate = " + newEstimate);
+
+                    Q.updateKeys(tile2, tile1, newEstimate); // tile2 predecessor = t1 and costEstimate = newEstimate
                 }
 
             } // end of 2nd for loop
@@ -89,15 +88,19 @@ public abstract class PathFindingService {
         // the destination.
 
         ShortestPath shortestPath = new ShortestPath(startNode);
+        shortestPath.generateGraph();
 
         dijkstra(this.g.getVertices(), startNode);
 
         Tile destination = null;
 
+        System.out.println("origin : " + startNode); // Works
+
         for (int i=0 ; i<this.g.getVertices().size() ; i++) {
 
             if (this.g.getVertices().get(i).isDestination) { // ??
                 destination = this.g.getVertices().get(i);
+                System.out.println("destination : " + destination); // works
                 break;
             }
         }
@@ -106,6 +109,8 @@ public abstract class PathFindingService {
         Tile temp = destination;
 
         path.add(destination);
+        System.out.println("array with the destination : " + path); // works
+        System.out.println("destination predecessor : " + destination.predecessor); // works for 1, but null for 2. Why?
 
         while (temp != null && temp != startNode){
             path.add(temp.predecessor);
@@ -113,6 +118,7 @@ public abstract class PathFindingService {
         }
 
         reverseArray(path);
+        System.out.println("path with the correct order : " + path); // works
 
         return path;
     }
